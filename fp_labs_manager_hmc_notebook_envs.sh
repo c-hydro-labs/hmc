@@ -2,20 +2,26 @@
 
 #-----------------------------------------------------------------------------------------
 # Script information
-script_name='FP LABS - MANAGER HMC - NOTEBOOK ENVS'
-script_version="1.1.0"
-script_date='2021/01/20'
+script_name='FP LABS - MANAGER - NOTEBOOK ENVS - HMC'
+script_version="1.2.0"
+script_date='2022/09/26'
 
-script_folder_labs_root=$HOME'/fp_labs_hmc/'
-script_folder_labs_library_generic=$HOME'/fp_labs_hmc/library/jupyter_generic/'
-script_folder_labs_library_hmc=$HOME'/fp_labs_hmc/library/jupyter_hmc/'
+script_folder_labs_root=$HOME'/fp_labs_apps/'
+script_folder_labs_library_generic=$HOME'/fp_labs_apps/library/common/'
+script_folder_labs_library_hmc=$HOME'/fp_labs_apps/library/jupyter/'
 
-fp_virtualenv_folder=$HOME'/fp_virtualenv_python3_hmc/'
-fp_virtualenv_libs='fp_virtualenv_python3_hmc_libraries'
+### DEBUG START
+script_folder_labs_root='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/'
+script_folder_labs_library_generic='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/library/common/'
+script_folder_labs_library_hmc='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/library/jupyter/'
+### DEBUG END
+
+fp_conda_folder=$HOME'/fp_system_conda/'
+fp_conda_libs='fp_system_conda_jupyter_labs_libraries'
 
 # Command-lines:
 cmd_runner_jupyter="jupyter-lab"
-cmd_installer_hmc="git clone https://github.com/c-hydro/hmc.git --branch v3.1.3 --single-branch $script_folder_labs_library_hmc"
+cmd_installer_hmc="git clone https://github.com/c-hydro/hmc.git --branch v3.1.5 --single-branch $script_folder_labs_library_hmc"
 
 # Jupyter lab interactive graph:
 # https://towardsdatascience.com/how-to-produce-interactive-matplotlib-plots-in-jupyter-environment-1e4329d71651
@@ -25,8 +31,8 @@ cmd_installer_hmc="git clone https://github.com/c-hydro/hmc.git --branch v3.1.3 
 
 #-----------------------------------------------------------------------------------------
 # Activate virtualenv
-export PATH=$fp_virtualenv_folder/bin:$PATH
-source activate $fp_virtualenv_libs
+export PATH=$fp_conda_folder/bin:$PATH
+source activate $fp_conda_libs
 
 # Add path to pythonpath
 export PYTHONPATH="${PYTHONPATH}:$script_folder_labs"
@@ -48,11 +54,11 @@ echo " ====> CHECK JUPYTER-LAB ENV INSTALLATION ..."
 if ! type "$cmd_runner_jupyter" > /dev/null; then
     echo " ====> CHECK JUPYTER-LAB ENV INSTALLATION ... FAILED. TRY TO INSTALL THE JUPYTER-LAB IN THE VIRTUAL ENVIRONMENT"
     echo " =====> INSTALL JUPYTER-LAB ENV ... "
-    #conda install -y -n $fp_virtualenv_libs -c conda-forge cartopy=0.17
-    conda install -y -n $fp_virtualenv_libs -c conda-forge jupyterlab
-    conda install -y -n $fp_virtualenv_libs -c conda-forge ipywidgets
-    conda install -y -n $fp_virtualenv_libs -c conda-forge ipympl
-    conda install -y -n $fp_virtualenv_libs -c conda-forge nodejs=12
+    #conda install -y -n $fp_conda_libs -c conda-forge cartopy=0.17
+    conda install -y -n $fp_conda_libs -c conda-forge jupyterlab
+    conda install -y -n $fp_conda_libs -c conda-forge ipywidgets
+    conda install -y -n $fp_conda_libs -c conda-forge ipympl
+    conda install -y -n $fp_conda_libs -c conda-forge nodejs=12
     jupyter labextension install @jupyter-widgets/jupyterlab-manager
     jupyter lab build
     echo " =====> INSTALL JUPYTER-LAB ENV ... DONE"

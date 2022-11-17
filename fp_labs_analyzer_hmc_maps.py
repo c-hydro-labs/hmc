@@ -4,7 +4,7 @@ FP-Labs - Analyzer HMC maps
 __date__ = '20210113'
 __version__ = '1.0.0'
 __author__ = 'Fabio Delogu (fabio.delogu@cimafoundation.org'
-__library__ = 'fp-labs'
+__library__ = 'fp-dev-labs'
 
 General command line:
 python fp_labs_analyzer_hmc_maps.py -settings_file configuration.json
@@ -16,17 +16,19 @@ Version(s):
 
 # -------------------------------------------------------------------------------------
 # Complete library
-from library.jupyter_generic.lib_jupyter_data_io_json import read_file_settings
-from library.jupyter_generic.lib_jupyter_data_io_generic import define_file_path, define_file_template, fill_file_template, \
-    create_darray_maps, define_file_var, create_time_range, validate_time_step, organize_file_template, \
-    get_path_root, get_path_folders, get_folders_time
+from library.common.lib_data_io_json import read_file_settings
+from library.common.lib_data_io_generic import define_file_path, define_file_template, fill_file_template, \
+    create_darray_maps, define_file_var, organize_file_template, \
+    get_path_root, get_path_folders, define_file_time
 
-from library.jupyter_generic.lib_jupyter_data_geo_ascii import read_data_grid
-from library.jupyter_generic.lib_jupyter_data_geo_shapefile import read_data_section
+from library.common.lib_data_geo_ascii import read_data_grid
+from library.common.lib_data_geo_shapefile import read_data_section
 
-from library.jupyter_generic.lib_jupyter_data_io_netcdf import read_file_maps
+from library.common.lib_data_io_netcdf import read_file_maps
 
-from library.jupyter_generic.lib_jupyter_plot_map import plot_map_terrain, plot_map_var
+from library.common.lib_graph_map import plot_map_terrain, plot_map_var
+
+from library.common.lib_utils_time import create_time_range
 # -------------------------------------------------------------------------------------
 
 
@@ -38,7 +40,12 @@ def main(file_name_settings="fp_labs_analyzer_hmc_maps.json"):
     settings_info = read_file_settings(file_name_settings)
 
     # Define static and dynamic file path(s)
-    file_path_dset_static = define_file_path(settings_info['source']['static'])
+    file_path_static = settings_info['source']['static']
+    file_path_source = settings_info['source']['dynamic']
+    file_path_plot = settings_info['destination']['plot']
+
+
+    file_path_dset_static = define_file_path()
     file_path_dset_dynamic = define_file_path(settings_info['source']['dynamic'])
     file_path_dset_plot = define_file_path(settings_info['destination']['plot'])
 

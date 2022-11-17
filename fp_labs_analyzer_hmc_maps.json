@@ -1,14 +1,23 @@
 {
-  "info": {
+    "generic": {
+    "__comment__": "mode: interactive_local, interactive_remote, cmd",
+    "mode": "cmd",
+    "path_home": null,
+    "path_root_data_static": "$HOME/fp_labs_datasets/data_static/",
+    "path_root_data_dynamic_source": "$HOME/fp_labs_datasets/data_dynamic/",
+    "path_root_data_dynamic_destination": "$HOME/fp_labs_datasets/images/",
     "domain_name": "marche",
     "var_list_forcing_obs_ws": ["Rain", "Air_Temperature", "Relative_Humidity"],
     "var_list_outcome": ["SM", "LST"]
+    "type": "nrt"
   },
-  "time" : {
-    "time_run": "2021-01-22 06:00",
-    "time_observed_period": 5,
-    "time_observed_frequency": "H",
-    "time_analysis": "2021-01-22 03:00"
+  "case_study" : {
+    "time_analysis" : "2022-09-15 07:00",
+    "time_start": null,
+    "time_end": null,
+    "time_frequency": "H",
+    "time_period_right": 5,
+    "time_period_left": 5
   },
   "template": {
     "domain_name": "domain_name_string",
@@ -20,41 +29,41 @@
     "plot_datetime": "%Y%m%d%H%M",
     "plot_sub_path": "%Y%m%d_%H"
   },
-  "source" : {
+  "data" : {
     "static": {
       "terrain": {
-        "folder_name": "$HOME/fp_labs_datasets/data_static/gridded/",
+        "folder_name": "{path_root_data_static}/gridded_marche/",
         "file_name": "marche.dem.txt"
       },
       "river_network": {
-        "folder_name": "$HOME/fp_labs_datasets/data_static/gridded/",
+        "folder_name": "{path_root_data_static}/gridded_marche/",
         "file_name": "marche.choice.txt"
       },
       "sections": {
-        "folder_name": "$HOME/fp_labs_datasets/data_static/shapefile/",
+        "folder_name": "{path_root_data_static}/shapefile_marche/",
         "file_name": "fp_sections_marche.shp"
       }
     },
     "dynamic": {
-      "maps_forcing_obs_ws": {
-        "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{maps_forcing_obs_ws_sub_path}/data_forcing/ws/",
-        "file_name": "ws.db.{maps_forcing_obs_ws_datetime}.nc.gz"
+      "source": {
+        "maps_forcing_obs_ws": {
+          "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{maps_forcing_obs_ws_sub_path}/data_forcing/ws/",
+          "file_name": "ws.db.{maps_forcing_obs_ws_datetime}.nc.gz"
+        },
+        "maps_outcome": {
+          "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{maps_outcome_sub_path}/data_archive/gridded/",
+          "file_name": "hmc.output-grid.{maps_outcome_datetime}.nc.gz"
+        }
       },
-      "maps_outcome": {
-        "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{maps_outcome_sub_path}/data_archive/gridded/",
-        "file_name": "hmc.output-grid.{maps_outcome_datetime}.nc.gz"
-      }
-    }
-  },
-  "destination": {
-    "plot": {
-      "maps_forcing_obs_ws": {
-        "folder_name":"$HOME/fp_labs_datasets/images/",
-        "file_name": "hmc.forcing_{var_name}.{plot_datetime}.png"
-      },
-      "maps_outcome": {
-        "folder_name":"$HOME/fp_labs_datasets/images/",
-        "file_name": "hmc.outcome_{var_name}.{plot_datetime}.png"
+      "destination": {
+        "maps_forcing_obs_ws": {
+          "folder_name": "$HOME/fp_labs_datasets/images/",
+          "file_name": "hmc.forcing_{var_name}.{plot_datetime}.png"
+        },
+        "maps_outcome": {
+          "folder_name": "$HOME/fp_labs_datasets/images/",
+          "file_name": "hmc.outcome_{var_name}.{plot_datetime}.png"
+        }
       }
     }
   }
