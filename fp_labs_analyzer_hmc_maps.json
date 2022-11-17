@@ -1,0 +1,61 @@
+{
+  "info": {
+    "domain_name": "marche",
+    "var_list_forcing_obs_ws": ["Rain", "Air_Temperature", "Relative_Humidity"],
+    "var_list_outcome": ["SM", "LST"]
+  },
+  "time" : {
+    "time_run": "2021-01-22 06:00",
+    "time_observed_period": 5,
+    "time_observed_frequency": "H",
+    "time_analysis": "2021-01-22 03:00"
+  },
+  "template": {
+    "domain_name": "domain_name_string",
+    "var_name": "var_name_string",
+    "maps_forcing_obs_ws_datetime": "%Y%m%d%H%M",
+    "maps_forcing_obs_ws_sub_path": "%Y%m%d_%H",
+    "maps_outcome_datetime": "%Y%m%d%H%M",
+    "maps_outcome_sub_path": "%Y%m%d_%H",
+    "plot_datetime": "%Y%m%d%H%M",
+    "plot_sub_path": "%Y%m%d_%H"
+  },
+  "source" : {
+    "static": {
+      "terrain": {
+        "folder_name": "$HOME/fp_labs_datasets/data_static/gridded/",
+        "file_name": "marche.dem.txt"
+      },
+      "river_network": {
+        "folder_name": "$HOME/fp_labs_datasets/data_static/gridded/",
+        "file_name": "marche.choice.txt"
+      },
+      "sections": {
+        "folder_name": "$HOME/fp_labs_datasets/data_static/shapefile/",
+        "file_name": "fp_sections_marche.shp"
+      }
+    },
+    "dynamic": {
+      "maps_forcing_obs_ws": {
+        "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{maps_forcing_obs_ws_sub_path}/data_forcing/ws/",
+        "file_name": "ws.db.{maps_forcing_obs_ws_datetime}.nc.gz"
+      },
+      "maps_outcome": {
+        "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{maps_outcome_sub_path}/data_archive/gridded/",
+        "file_name": "hmc.output-grid.{maps_outcome_datetime}.nc.gz"
+      }
+    }
+  },
+  "destination": {
+    "plot": {
+      "maps_forcing_obs_ws": {
+        "folder_name":"$HOME/fp_labs_datasets/images/",
+        "file_name": "hmc.forcing_{var_name}.{plot_datetime}.png"
+      },
+      "maps_outcome": {
+        "folder_name":"$HOME/fp_labs_datasets/images/",
+        "file_name": "hmc.outcome_{var_name}.{plot_datetime}.png"
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "info": {
+    "run_name": "jupyter_ws",
+    "domain_name": "marche",
+    "time_run": null
+  },
+  "template": {
+    "run_name": "string_run_name",
+    "domain_name": "string_domain_name",
+    "group_name": "string_group_name",
+    "time_name": "string_time_name",
+    "run_datetime": "%Y%m%d%H%M",
+    "run_sub_path": "%Y%m%d_%H",
+    "plot_datetime": "%Y%m%d%H%M",
+    "plot_sub_path": "%Y%m%d_%H"
+  },
+  "configuration_info": {
+    "default": {
+      "settings_algorithm": {
+        "folder_name": "$HOME/fp_labs_hmc/",
+        "file_name": "fp_labs_runner_hmc_algorithm_default.json"
+      },
+      "settings_datasets": {
+        "folder_name": "$HOME/fp_labs_hmc/",
+        "file_name": "fp_labs_runner_hmc_datasets_default.json"
+      }
+    },
+    "defined": {
+      "settings_algorithm": {
+        "folder_name": "$HOME/fp_labs_hmc/",
+        "file_name": "fp_labs_runner_hmc_algorithm_{run_datetime}.json"
+      },
+      "settings_datasets": {
+        "folder_name": "$HOME/fp_labs_hmc/",
+        "file_name": "fp_labs_runner_hmc_datasets_{run_datetime}.json"
+      }
+    }
+  },
+  "datasets_info": {
+    "data_static": {
+      "folder_name": "$HOME/fp_labs_datasets/data_static/shapefile/",
+      "file_name": "fp_sections_marche.shp"
+    },
+    "data_dynamic": {
+      "folder_name": "$HOME/fp_labs_datasets/data_dynamic/",
+      "file_name": ""
+    },
+    "run_realtime_ts_images": {
+      "folder_name": "$HOME/fp_run_hmc/{run_name}/outcome/images/",
+      "file_name": "hmc_ts_group{group_name}_{time_name}.png"
+    },
+    "run_realtime_ts_hydrograph": {
+      "folder_name": "$HOME/fp_run_hmc/{run_name}/outcome/timeseries/",
+      "file_name": "hmc.hydrograph.txt"
+    }
+  }
+}

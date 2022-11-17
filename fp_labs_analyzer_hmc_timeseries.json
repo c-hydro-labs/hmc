@@ -1,0 +1,59 @@
+{
+  "info": {
+    "domain_name": "marche",
+    "section_name": "Moie",
+    "basin_name": "Esino"
+  },
+  "time_run" : "2021-01-22 06:00",
+  "template": {
+    "domain_name": "string_domain_name",
+    "section_name": "string_section_name",
+    "basin_name": "string_basin_name",
+    "time_series_datetime": "%Y%m%d%H%M",
+    "time_series_sub_path": "%Y%m%d_%H",
+    "plot_datetime": "%Y%m%d%H%M",
+    "plot_sub_path": "%Y%m%d_%H"
+  },
+  "source" : {
+    "static": {
+      "terrain": {
+        "folder_name": "$HOME/fp_labs_datasets/data_static/gridded/",
+        "file_name": "marche.dem.txt"
+      },
+      "river_network": {
+        "folder_name": "$HOME/fp_labs_datasets/data_static/gridded/",
+        "file_name": "marche.choice.txt"
+      },
+      "sections": {
+        "folder_name": "$HOME/fp_labs_datasets/data_static/shapefile/",
+        "file_name": "fp_sections_marche.shp"
+      }
+    },
+    "dynamic": {
+      "time_series_hydrograph": {
+        "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{time_series_sub_path}/data_archive/collections/",
+        "file_name": "hydrograph_{section_name}_{basin_name}_{time_series_datetime}.json"
+      },
+      "time_series_collections": {
+        "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{time_series_sub_path}/data_archive/collections/",
+        "file_name": "hmc.collections.{time_series_datetime}.nc"
+      }
+    }
+  },
+  "destination": {
+    "plot": {
+      "section_locator": {
+        "folder_name":"$HOME/fp_labs_datasets/images/",
+        "file_name": "hmc.section_locator_{section_name}_{basin_name}.png"
+      },
+      "time_series_discharge": {
+        "folder_name":"$HOME/fp_labs_datasets/images/",
+        "file_name": "hmc.ts_discharge_{section_name}_{basin_name}.{plot_datetime}.png"
+      },
+      "time_series_forcing": {
+        "folder_name":"$HOME/fp_labs_datasets/images/",
+        "file_name": "hmc.ts_forcing.{plot_datetime}.png"
+      }
+    }
+  }
+}
