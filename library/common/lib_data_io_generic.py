@@ -29,7 +29,7 @@ log_stream = logging.getLogger(logger_name)
 
 # -------------------------------------------------------------------------------------
 # Method to set the information mode
-def set_info_mode(obj_data, tag_field_mode='mode',
+def set_info_mode(obj_data, tag_field_mode='mode', tag_type='time_series',
                   tag_field_domain_name='domain_name',
                   tag_field_basin_name='basin_name', tag_field_section_name='section_name'):
 
@@ -39,20 +39,43 @@ def set_info_mode(obj_data, tag_field_mode='mode',
         print(' ERROR ===> The key mode "' + tag_field_mode + '" must be defined in the configuration file')
         raise IOError('The key mode must be defined to correctly run the notebook')
 
-    if field_mode == 'cmd':
-        field_domain_name = obj_data[tag_field_domain_name]
-        field_basin_name = obj_data[tag_field_basin_name]
-        field_section_name = obj_data[tag_field_section_name]
-    elif field_mode == 'interactive_local':
-        field_domain_name, field_basin_name, field_section_name = None, None, None
-    elif field_mode == 'interactive_remote':
-        field_domain_name, field_basin_name, field_section_name = None, None, None
-    else:
-        print(' ERROR ===> The field mode "' + field_mode + '" is not supported yet')
-        raise RuntimeError(' ===> The field mode must be defined by '
-                           '"cmd", "interactive_local" and "interactive_remote" value')
+    if tag_type == 'time_series':
+        if field_mode == 'cmd':
+            field_domain_name = obj_data[tag_field_domain_name]
+            field_basin_name = obj_data[tag_field_basin_name]
+            field_section_name = obj_data[tag_field_section_name]
+        elif field_mode == 'interactive_local':
+            field_domain_name, field_basin_name, field_section_name = None, None, None
+        elif field_mode == 'interactive_remote':
+            field_domain_name, field_basin_name, field_section_name = None, None, None
+        else:
+            print(' ERROR ===> The field mode "' + field_mode + '" is not supported yet')
+            raise RuntimeError(' ===> The field mode must be defined by '
+                               '"cmd", "interactive_local" and "interactive_remote" value')
 
-    return field_mode, field_domain_name, field_basin_name, field_section_name
+        return field_mode, field_domain_name, field_basin_name, field_section_name
+
+    elif tag_type == 'maps':
+
+        if field_mode == 'cmd':
+            field_domain_name = obj_data[tag_field_domain_name]
+        elif field_mode == 'interactive_local':
+            field_domain_name = None
+        elif field_mode == 'interactive_remote':
+            field_domain_name = None
+        else:
+            print(' ERROR ===> The field mode "' + field_mode + '" is not supported yet')
+            raise RuntimeError(' ===> The field mode must be defined by '
+                               '"cmd", "interactive_local" and "interactive_remote" value')
+
+        return field_mode, field_domain_name
+
+    else:
+
+        print(' ERROR ===> The field type "' + tag_type + '" is not supported yet')
+        raise RuntimeError(' ===> The field mode must be defined by '
+                           '"time_series" and "maps" value')
+
 # -------------------------------------------------------------------------------------
 
 
@@ -327,7 +350,7 @@ def select_file_time(time_db_collections, time_ref_collections,
 
 # -------------------------------------------------------------------------------------
 # Method to filter time db using a time window
-def filter_file_time(info_time_db_general, info_datetime_idx_analysis, time_format='%Y-%m-%d %H:%M',):
+def filter_file_time(info_time_db_general, info_datetime_idx_analysis, time_format='%Y-%m-%d %H:%M'):
 
     info_time_db_filter, info_time_list_filter = {},{}
     for info_key, info_times_step in info_time_db_general.items():
@@ -689,6 +712,20 @@ def define_file_path_analyzer(settings_data,
 
 # -------------------------------------------------------------------------------------
 # Method to define file name filling with variable name
+def define_file_map(file_name_in, var_name, var_tag='var_name'):
+
+    file_name_tmp = file_name_in.replace(var_tag, ':')
+    file_path_out = file_name_tmp.format(var_name)
+    folder_name_out, file_name_out = os.path.split(file_path_out)
+    make_folder(folder_name_out)
+
+    return file_path_out
+
+# -------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------------------
+# Method to define file name filling with variable name
 def define_file_var(file_name_collections, file_time, var_name, dataset_name, var_tag='var_name'):
 
     if file_time in list(file_name_collections.keys()):
@@ -706,6 +743,23 @@ def define_file_var(file_name_collections, file_time, var_name, dataset_name, va
 
 # -------------------------------------------------------------------------------------
 
+
+# -------------------------------------------------------------------------------------
+# Method to create data array variable
+def create_darray_map(dset_in, var_name_in='Air_Temperature', var_name_out='Air_T'):
+
+    dset_vars_in = list(dset_in.data_vars)
+    if var_name_in in dset_vars_in:
+
+        dset_tmp = dset_in.rename({var_name_in: var_name_out})
+        var_darray_out = dset_tmp[var_name_out]
+        var_attrs_out = var_darray_out.attrs
+
+        return var_darray_out, var_attrs_out
+    else:
+        raise IOError('Dataset variable does not exist')
+
+# -------------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------------
 # Method to create data array variable

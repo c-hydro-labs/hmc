@@ -26,7 +26,8 @@ from library.common.lib_info_args import logger_name, logger_format
 from library.common.lib_utils_logging import set_logging_file
 
 from library.common.lib_data_io_json import read_file_settings
-from library.common.lib_data_io_generic import define_file_path, define_file_time, filter_file_time, select_file_time, \
+from library.common.lib_data_io_generic import define_file_path_analyzer, \
+    define_file_time, filter_file_time, select_file_time, \
     define_file_obj, define_file_variables, \
     get_path_root, get_path_home, set_info_mode
 
@@ -104,7 +105,7 @@ def main(file_name_settings="fp_labs_analyzer_hmc_timeseries.json"):
     # -------------------------------------------------------------------------------------
     # Define file static path(s)
     obj_filled_path = dict.fromkeys(list(obj_template_path.keys()), file_path_root_static)
-    file_path_dset_static = define_file_path(
+    file_path_dset_static = define_file_path_analyzer(
         obj_data_static, path_template_raw=obj_template_path, path_template_values=obj_filled_path,
         tag_file_time=None)[0]
 
@@ -155,7 +156,7 @@ def main(file_name_settings="fp_labs_analyzer_hmc_timeseries.json"):
         time_pivot='reference', time_value=None, time_random=True)
 
     # Define dynamic source folder(s)
-    file_path_dynamic_source = define_file_path(
+    file_path_dynamic_source = define_file_path_analyzer(
         obj_data_dynamic_source, tag_file_time='time_dataset',
         geo_template_raw=obj_template_path, geo_template_values=obj_filled_geo,
         time_template_raw=obj_template_time, time_template_values={'time_dataset': info_time_dynamic_source_selected},
@@ -166,14 +167,14 @@ def main(file_name_settings="fp_labs_analyzer_hmc_timeseries.json"):
 
     # Define dynamic destination folder(s)
     obj_filled_path = dict.fromkeys(list(obj_template_path.keys()), file_path_root_dynamic_destination_workspace)
-    file_path_dset_dynamic_destination_workspace_section = define_file_path(
+    file_path_dset_dynamic_destination_workspace_section = define_file_path_analyzer(
         obj_data_dynamic_destination_workspace, tag_file_time='time_reference',
         geo_template_raw=obj_template_geo, geo_template_values=obj_filled_geo,
         time_template_raw=obj_template_time, time_template_values={'time_reference': info_time_analysis},
         path_template_raw=obj_template_path, path_template_values=obj_filled_path,
         tag_group='section_time_series')[0]
 
-    file_path_dset_dynamic_destination_workspace_domain = define_file_path(
+    file_path_dset_dynamic_destination_workspace_domain = define_file_path_analyzer(
         obj_data_dynamic_destination_workspace, tag_file_time='time_reference',
         geo_template_raw=obj_template_geo, geo_template_values=obj_filled_geo,
         time_template_raw=obj_template_time, time_template_values={'time_reference': info_time_analysis},
@@ -181,13 +182,13 @@ def main(file_name_settings="fp_labs_analyzer_hmc_timeseries.json"):
         tag_group='domain_time_series')[0]
 
     obj_filled_path = dict.fromkeys(list(obj_template_path.keys()), file_path_root_dynamic_destination_plot)
-    file_path_dset_dynamic_destination_plot_section, file_act_dset_dynamic_destination_plot_section = define_file_path(
+    file_path_dset_dynamic_destination_plot_section, file_act_dset_dynamic_destination_plot_section = define_file_path_analyzer(
         obj_data_dynamic_destination_plot, tag_file_time='time_reference',
         geo_template_raw=obj_template_geo, geo_template_values=obj_filled_geo,
         time_template_raw=obj_template_time, time_template_values={'time_reference': info_time_analysis},
         path_template_raw=obj_template_path, path_template_values=obj_filled_path,
         tag_group='section_time_series')
-    file_path_dset_dynamic_destination_plot_domain, file_act_dset_dynamic_destination_plot_domain = define_file_path(
+    file_path_dset_dynamic_destination_plot_domain, file_act_dset_dynamic_destination_plot_domain = define_file_path_analyzer(
         obj_data_dynamic_destination_plot, tag_file_time='time_reference',
         geo_template_raw=obj_template_geo, geo_template_values=obj_filled_geo,
         time_template_raw=obj_template_time, time_template_values={'time_reference': info_time_analysis},

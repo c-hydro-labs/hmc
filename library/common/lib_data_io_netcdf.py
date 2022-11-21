@@ -28,6 +28,35 @@ attrs_collections_excluded = ['dam_name', 'plant_name', 'dam_system_name',
 
 # -------------------------------------------------------------------------------------
 # Method to read netcdf maps file
+def read_file_map(file_name_in, file_time_in, file_vars_expected=None):
+
+    if os.path.exists(file_name_in):
+        if file_name_in.endswith(zip_extension):
+            file_name_zip = file_name_in
+            file_name_unzip = file_name_in.replace(zip_extension, '')
+            unzip_filename(file_name_zip, file_name_unzip)
+        else:
+            file_name_unzip = file_name_in
+    else:
+        print(' ERROR ===> File "' + file_name_in + '" is not available')
+        raise FileNotFoundError('File not found!')
+
+    file_handle = xr.open_dataset(file_name_unzip)
+    file_vars_list_all = list(file_handle.data_vars)
+    file_vars_list_expected = list(file_vars_expected.values())
+
+    if file_vars_list_expected is None:
+        file_vars_list_expected = file_vars_list_all
+
+    file_vars_search = [var_step for var_step in file_vars_list_expected if var_step in file_vars_list_all]
+    dset_vars_search = file_handle[file_vars_search]
+
+    return dset_vars_search
+# -------------------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------------------
+# Method to read netcdf maps file
 def read_file_maps(file_name, file_time, file_vars_list_select=None, format_time='%Y-%m-%d %H:00'):
 
     if isinstance(file_name, str):

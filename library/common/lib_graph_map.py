@@ -37,11 +37,7 @@ def plot_map_var(file_path, var_darray, var_time, var_limit_min=None, var_limit_
                  var_name_data='air_temperature', var_units='[C]',
                  var_name_geo_x='longitude', var_name_geo_y='latitude',
                  tag_sep=' ', fig_color_map_type=None, fig_dpi=150, fig_show=True):
-    
-    file_folder, file_name = os.path.split(file_path)
-    if not os.path.exists(file_folder):
-        make_folder(file_folder)
-        
+
     # Axis labels
     var_label = tag_sep.join([var_name_data, var_units])
 
@@ -113,12 +109,14 @@ def plot_map_var(file_path, var_darray, var_time, var_limit_min=None, var_limit_
     cb1.set_label(var_label, size=12, color='gray', weight='normal')
     cb1.ax.tick_params(labelsize=10, labelcolor='gray')
 
-    #plt.show()
-    fig.savefig(file_path, dpi=fig_dpi)
+    if file_path is not None:
+        file_folder, file_name = os.path.split(file_path)
+        if not os.path.exists(file_folder):
+            make_folder(file_folder)
+        fig.savefig(file_path, dpi=fig_dpi)
 
-    if not fig_show:
-        plt.close()
-
+        if not fig_show:
+            plt.close()
 # -------------------------------------------------------------------------------------
 
 

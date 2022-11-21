@@ -4,30 +4,53 @@
     "mode": "cmd",
     "path_home": null,
     "path_root_data_static": "$HOME/fp_labs_datasets/data_static/",
-    "path_root_data_dynamic_source": "$HOME/fp_labs_datasets/data_dynamic/",
-    "path_root_data_dynamic_destination": "$HOME/fp_labs_datasets/images/",
+    "path_root_data_dynamic_source": "$HOME/fp_labs_datasets/data_dynamic/maps/",
+    "path_root_data_dynamic_destination": "$HOME/fp_labs_datasets/images/maps/",
     "domain_name": "marche",
-    "var_list_forcing_obs_ws": ["Rain", "Air_Temperature", "Relative_Humidity"],
-    "var_list_outcome": ["SM", "LST"]
     "type": "nrt"
   },
   "case_study" : {
-    "time_analysis" : "2022-09-15 07:00",
+    "description": "evento_novembre_2022",
+    "time_analysis" : "2022-11-17 12:00",
     "time_start": null,
     "time_end": null,
     "time_frequency": "H",
-    "time_period_right": 5,
-    "time_period_left": 5
+    "time_period_right": 24,
+    "time_period_left": 24
   },
   "template": {
-    "domain_name": "domain_name_string",
-    "var_name": "var_name_string",
-    "maps_forcing_obs_ws_datetime": "%Y%m%d%H%M",
-    "maps_forcing_obs_ws_sub_path": "%Y%m%d_%H",
-    "maps_outcome_datetime": "%Y%m%d%H%M",
-    "maps_outcome_sub_path": "%Y%m%d_%H",
-    "plot_datetime": "%Y%m%d%H%M",
-    "plot_sub_path": "%Y%m%d_%H"
+    "path": {
+      "path_root_data_static": "string_path_root_data_static",
+      "path_root_data_dynamic_source": "string_path_root_data_dynamic_source",
+      "path_root_data_dynamic_destination": "string_path_root_data_dynamic_destination"
+    },
+    "geo": {
+      "domain_name": "domain_name_string"
+    },
+    "variable": {
+      "var_name": "var_name_string"
+    },
+    "time": {
+      "maps_datetime_forcing": "%Y%m%d%H%M",
+      "maps_sub_path_forcing": "%Y%m%d",
+      "maps_datetime_results": "%Y%m%d%H%M",
+      "maps_sub_path_results": "%Y%m%d",
+      "plot_datetime": "%Y%m%d%H%M",
+      "plot_sub_path": "%Y%m%d"
+    }
+  },
+  "variables": {
+    "forcing": {
+      "time": "times",
+      "rain": "Rain",
+      "air_temperature": "Air_Temperature",
+      "relative_humidity": "Relative_Humidity"
+    },
+    "results": {
+      "time": "times",
+      "soil_moisture": "SM",
+      "land_surface_temperature": "LST"
+    }
   },
   "data" : {
     "static": {
@@ -46,25 +69,31 @@
     },
     "dynamic": {
       "source": {
-        "maps_forcing_obs_ws": {
-          "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{maps_forcing_obs_ws_sub_path}/data_forcing/ws/",
-          "file_name": "ws.db.{maps_forcing_obs_ws_datetime}.nc.gz"
+        "maps_forcing": {
+          "folder_name": "{path_root_data_dynamic_source}/forcing/weather_stations_realtime/{maps_sub_path_forcing}/",
+          "file_name": "ws.db.{maps_datetime_forcing}.nc.gz",
+          "time_reference": "2022-11-17"
         },
-        "maps_outcome": {
-          "folder_name": "$HOME/fp_labs_datasets/data_dynamic/{maps_outcome_sub_path}/data_archive/gridded/",
-          "file_name": "hmc.output-grid.{maps_outcome_datetime}.nc.gz"
+        "maps_results": {
+          "folder_name": "{path_root_data_dynamic_source}/results/weather_stations_realtime/{maps_sub_path_results}/",
+          "file_name": "hmc.output-grid.{maps_datetime_results}.nc.gz",
+          "time_reference": "2022-11-17"
         }
       },
       "destination": {
-        "maps_forcing_obs_ws": {
-          "folder_name": "$HOME/fp_labs_datasets/images/",
+        "maps_forcing": {
+          "folder_name": "{path_root_data_dynamic_destination}/forcing/weather_stations_realtime/",
           "file_name": "hmc.forcing_{var_name}.{plot_datetime}.png"
         },
-        "maps_outcome": {
-          "folder_name": "$HOME/fp_labs_datasets/images/",
+        "maps_results": {
+          "folder_name": "{path_root_data_dynamic_destination}/results/weather_stations_realtime/",
           "file_name": "hmc.outcome_{var_name}.{plot_datetime}.png"
         }
       }
     }
+  },
+  "log": {
+    "folder_name": "$HOME/fp_labs_apps/tmp/",
+    "file_name": "fp_labs_maps_logging.txt"
   }
 }
