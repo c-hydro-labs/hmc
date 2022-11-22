@@ -19,6 +19,7 @@ Version(s):
 # -------------------------------------------------------------------------------------
 # Complete library
 import os
+import pandas as pd
 import sys
 from argparse import ArgumentParser
 
@@ -27,9 +28,10 @@ from library.common.lib_utils_logging import set_logging_file
 
 from library.common.lib_data_io_json import read_file_settings
 from library.common.lib_data_io_generic import define_file_path_analyzer, \
-    filter_file_time, select_file_time, define_file_time, define_file_map, define_file_variables, \
+    define_file_time, define_file_map, define_file_variables, \
     create_darray_map, \
-    get_path_root, get_path_home, set_info_mode
+    get_path_root, get_path_home, set_info_mode, \
+    convert_tstamp_2_tstr, define_folder_time
 
 from library.common.lib_data_geo_ascii import read_data_grid
 from library.common.lib_data_geo_shapefile import read_data_section
@@ -128,40 +130,67 @@ def main(file_name_settings="fp_labs_analyzer_hmc_maps.json"):
         time_template_raw=obj_template_time, time_template_values=None,
         path_template_raw=obj_template_path, path_template_values=obj_filled_path)
 
-    # Filter time according to the analysis period (routine for interactive mode)
-    info_time_db_dynamic_source_filtered, info_time_list_dynamic_source_filtered = filter_file_time(
-        info_time_db_dynamic_source_generic, info_time_db_analysis_period)
+    time_folder_list_forcing = convert_tstamp_2_tstr(info_time_db_dynamic_source_generic['maps_forcing'])
+    time_folder_list_results = convert_tstamp_2_tstr(info_time_db_dynamic_source_generic['maps_results'])
 
-    # Select time analysis (routine for cmd mode)
-    info_time_dynamic_source_selected = select_file_time(
-        info_time_db_dynamic_source_generic, info_time_ref_dynamic_source_generic,
-        time_pivot='reference', time_value=None, time_random=True)
+    time_folder_select_forcing = time_folder_list_forcing[0]
+    time_folder_select_results = time_folder_list_results[0]
+
+    folder_name_forcing_generic = obj_data_dynamic_source['maps_forcing']['folder_name']
+    obj_filled_time = {'maps_sub_path_forcing': pd.Timestamp(time_folder_select_forcing)}
+    time_file_list_forcing = define_folder_time(folder_name_forcing_generic,
+                                                obj_filled_time, obj_filled_path,
+                                                obj_template_time, obj_template_path)
+
+    folder_name_results_generic = obj_data_dynamic_source['maps_results']['folder_name']
+    obj_filled_time = {'maps_sub_path_results': pd.Timestamp(time_folder_select_results)}
+    time_file_list_results = define_folder_time(folder_name_results_generic,
+                                                obj_filled_time, obj_filled_path,
+                                                obj_template_time, obj_template_path)
+
+    time_file_select_forcing = time_file_list_forcing[0]
+    time_file_select_results = time_file_list_results[0]
 
     # Define dynamic source folder(s)
-    file_path_dynamic_source = define_file_path_analyzer(
-        obj_data_dynamic_source, tag_file_time='time_reference',
+    obj_data_dynamic_source_forcing = {'maps_forcing': obj_data_dynamic_source['maps_forcing']}
+    file_path_dynamic_source_forcing = define_file_path_analyzer(
+        obj_data_dynamic_source_forcing, tag_file_time='time_reference',
         geo_template_raw=obj_template_path, geo_template_values=obj_filled_geo,
-        time_template_raw=obj_template_time, time_template_values={'time_reference': info_time_analysis},
+        time_template_raw=obj_template_time, time_template_values={'time_reference': time_file_select_forcing},
+        path_template_raw=obj_template_path, path_template_values=obj_filled_path)[0]
+
+    obj_data_dynamic_source_results = {'maps_results': obj_data_dynamic_source['maps_results']}
+    file_path_dynamic_source_results = define_file_path_analyzer(
+        obj_data_dynamic_source_results, tag_file_time='time_reference',
+        geo_template_raw=obj_template_path, geo_template_values=obj_filled_geo,
+        time_template_raw=obj_template_time, time_template_values={'time_reference': time_file_select_results},
         path_template_raw=obj_template_path, path_template_values=obj_filled_path)[0]
 
     # Define dynamic destination folder(s)
     obj_filled_path = dict.fromkeys(list(obj_template_path.keys()), file_path_root_dynamic_destination)
-    file_path_dset_dynamic_destination, file_act_dset_dynamic_destination = define_file_path_analyzer(
-        obj_data_dynamic_destination, tag_file_time='time_reference',
+
+    obj_data_dynamic_destination_forcing = {'maps_forcing': obj_data_dynamic_destination['maps_forcing']}
+    file_path_dset_dynamic_destination_forcing, file_act_dset_dynamic_destination_forcing = define_file_path_analyzer(
+        obj_data_dynamic_destination_forcing, tag_file_time='time_reference',
         geo_template_raw=obj_template_geo, geo_template_values=obj_filled_geo,
-        time_template_raw=obj_template_time, time_template_values={'time_reference': info_time_analysis},
+        time_template_raw=obj_template_time, time_template_values={'time_reference': time_file_select_forcing},
+        path_template_raw=obj_template_path, path_template_values=obj_filled_path)
+
+    obj_data_dynamic_destination_results = {'maps_results': obj_data_dynamic_destination['maps_results']}
+    file_path_dset_dynamic_destination_results, file_act_dset_dynamic_destination_results = define_file_path_analyzer(
+        obj_data_dynamic_destination_results, tag_file_time='time_reference',
+        geo_template_raw=obj_template_geo, geo_template_values=obj_filled_geo,
+        time_template_raw=obj_template_time, time_template_values={'time_reference': time_file_select_results},
         path_template_raw=obj_template_path, path_template_values=obj_filled_path)
     # -------------------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------------------
     # Read forcing datasets map
     obj_maps_dynamic_forcing = read_file_map(
-        file_path_dynamic_source['maps_forcing'], info_time_dynamic_source_selected['maps_forcing'],
-        file_vars_expected=run_variables_forcing)
+        file_path_dynamic_source_forcing['maps_forcing'], file_vars_expected=run_variables_forcing)
     # Read results datasets map
     obj_maps_dynamic_results = read_file_map(
-        file_path_dynamic_source['maps_results'], info_time_dynamic_source_selected['maps_results'],
-        file_vars_expected=run_variables_results)
+        file_path_dynamic_source_results['maps_results'], file_vars_expected=run_variables_results)
     # -------------------------------------------------------------------------------------
 
     # -------------------------------------------------------------------------------------
@@ -183,7 +212,7 @@ def main(file_name_settings="fp_labs_analyzer_hmc_maps.json"):
     # -------------------------------------------------------------------------------------
     # Plot map soil moisture
     file_name_map_sm = define_file_map(
-        file_path_dset_dynamic_destination['maps_results'], var_name='soil_moisture')
+        file_path_dset_dynamic_destination_results['maps_results'], var_name='soil_moisture')
     plot_map_var(file_name_map_sm, darray_map_sm, info_time_analysis,
                  var_name_data='soil_moisture', var_units='[-]',
                  var_name_geo_x='Longitude', var_name_geo_y='Latitude',
@@ -191,7 +220,7 @@ def main(file_name_settings="fp_labs_analyzer_hmc_maps.json"):
 
     # Plot map air temperature
     file_name_map_airt = define_file_map(
-        file_path_dset_dynamic_destination['maps_forcing'], var_name='air_temperature')
+        file_path_dset_dynamic_destination_forcing['maps_forcing'], var_name='air_temperature')
 
     plot_map_var(file_name_map_airt, darray_map_airt, info_time_analysis,
                  var_name_data='air_temperature', var_units='[C]',

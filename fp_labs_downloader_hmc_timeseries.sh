@@ -9,7 +9,7 @@ script_date='2022/09/26'
 script_folder_labs=$HOME'/fp_labs_apps/'
 
 ### DEBUG START
-script_folder_labs='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/'
+#script_folder_labs='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/'
 ### DEBUG END
 
 fp_conda_folder=$HOME'/fp_system_conda/'

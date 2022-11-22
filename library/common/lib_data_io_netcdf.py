@@ -28,7 +28,7 @@ attrs_collections_excluded = ['dam_name', 'plant_name', 'dam_system_name',
 
 # -------------------------------------------------------------------------------------
 # Method to read netcdf maps file
-def read_file_map(file_name_in, file_time_in, file_vars_expected=None):
+def read_file_map(file_name_in, file_vars_expected=None):
 
     if os.path.exists(file_name_in):
         if file_name_in.endswith(zip_extension):

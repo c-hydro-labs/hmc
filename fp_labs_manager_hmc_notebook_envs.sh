@@ -11,9 +11,9 @@ script_folder_labs_library_generic=$HOME'/fp_labs_apps/library/common/'
 script_folder_labs_library_hmc=$HOME'/fp_labs_apps/library/jupyter/'
 
 ### DEBUG START
-script_folder_labs_root='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/'
-script_folder_labs_library_generic='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/library/common/'
-script_folder_labs_library_hmc='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/library/jupyter/'
+#script_folder_labs_root='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/'
+#script_folder_labs_library_generic='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/library/common/'
+#script_folder_labs_library_hmc='/home/fabio/Desktop/PyCharm_Notebook/fp-labs-hmc-master/library/jupyter/'
 ### DEBUG END
 
 fp_conda_folder=$HOME'/fp_system_conda/'

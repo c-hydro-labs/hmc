@@ -13,6 +13,7 @@ import os
 import re
 import random
 
+from datetime import datetime
 from copy import deepcopy
 
 import xarray as xr
@@ -291,6 +292,32 @@ def define_file_obj(settings_data, tag_file_obj='info'):
     return obj_fields
 # -------------------------------------------------------------------------------------
 
+
+# -------------------------------------------------------------------------------------
+# Method to define file in folder
+def define_folder_time(folder_name_raw,
+                       obj_filled_time, obj_filled_path,
+                       obj_template_time, obj_template_path, time_format_file='%Y%m%d%H%M'):
+
+    obj_filled = {**obj_filled_path, **obj_filled_time}
+    obj_template = {**obj_template_path, **obj_template_time}
+
+    folder_name_def = fill_file_template(
+        folder_name_raw, template_filled=obj_filled, template_default=obj_template)
+
+    file_name_def = [f for f in os.listdir(folder_name_def) if os.path.isfile(os.path.join(folder_name_def, f))]
+
+    file_time_list = []
+    for file_name_step in file_name_def:
+
+        file_time_tmp = re.search(r'\d{12}', file_name_step)
+        file_time_str = str(pd.Timestamp(file_time_tmp.group()))
+        file_time_list.append(file_time_str)
+
+    file_time_list = sorted(file_time_list)[::-1]
+
+    return file_time_list
+# -------------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------------
 # Method to select file time
@@ -709,6 +736,16 @@ def define_file_path_analyzer(settings_data,
     return file_path_collections, file_activate_collections
 # -------------------------------------------------------------------------------------
 
+
+# -------------------------------------------------------------------------------------
+# Method to convert tstamp to tstr
+def convert_tstamp_2_tstr(time_stamp_list):
+
+    time_str_list = []
+    for time_stamp_step in time_stamp_list:
+        time_str_list.append(str(time_stamp_step))
+    return time_str_list
+# -------------------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------------------
 # Method to define file name filling with variable name
